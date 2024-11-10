@@ -1,4 +1,4 @@
-# Summarizer Project
+# Text Summarizer tool using RAG
 
 This project is a text summarization application that uses LangChain and OpenAI's GPT-3.5-turbo model to generate concise summaries from large text documents. The project also includes a vector store for efficient retrieval of relevant text chunks.
 
