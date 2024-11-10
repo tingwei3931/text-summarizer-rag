@@ -5,25 +5,29 @@ from pathlib import Path
 import asyncio
 import threading
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit
 
 
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app)
+
 vector_store = None
 vector_store_ready = False 
 
 # Function to initialize the vector store asynchronously
 async def initialize_vector_store_task():
-    global vector_store, vector_store_ready
     vector_store = await initialize_vector_store()
-    vector_store_ready = True
+    return vector_store
 
 # Function to run the async initialization in the background
 def start_vector_store_task():
+    global vector_store, vector_store_ready
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(initialize_vector_store_task())
-
+    vector_store = loop.run_until_complete(initialize_vector_store_task())
+    vector_store_ready = True
+    socketio.emit('vector_store_ready', {'ready': True})
 
 with app.app_context():
     print("Loading vector store...")
@@ -47,4 +51,4 @@ def check_vector_store():
     return jsonify({"ready": vector_store_ready})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True)

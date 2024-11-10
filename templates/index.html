@@ -7,6 +7,7 @@
 			content="width=device-width, initial-scale=1.0"
 		/>
 		<title>Text Summarization using RAG</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 		<style>
 			/* Reset some default styles */
 			* {
@@ -183,39 +184,18 @@
 
 		<script>
 			// Function to check if the vector store is loaded
-			function checkVectorStore() {
-				fetch('/check_vector_store')
-					.then(response => response.json())
-					.then(data => {
-						if (data.ready) {
-							// Hide the loading screen and show the content
-							loading = document.getElementById('loading');
-							content = document.getElementById('content');
+			const socket = io();
+			socket.on('vector_store_ready', data => {
+				if (data.ready) {
+					const loading = document.getElementById('loading');
+					const content = document.getElementById('content');
 
-							if (loading && content) {
-								loading.style.display = 'none';
-								content.style.display = 'block';
-							}
-						} else {
-							// Keep checking every 2 seconds if it's not ready
-							setTimeout(checkVectorStore, 2000);
-						}
-					})
-					.catch(error => {
-						console.error(
-							'Error checking vector store status:',
-							error
-						);
-					});
-			}
-
-			// Start checking when the page loads
-			 var vectorStoreReady = {{ vector_store_ready | tojson | safe }};
-			 window.onload = function() {
-			     if (!vectorStoreReady) {
-			         checkVectorStore();
-			     }
-			 };
+					if (loading && content) {
+						loading.style.display = 'none';
+						content.style.display = 'block';
+					}
+				}
+			});
 		</script>
 	</body>
 </html>
