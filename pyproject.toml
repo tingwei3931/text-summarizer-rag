@@ -1,0 +1,19 @@
+[project]
+name = "text-summarizer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.12.3",
+    "faiss-cpu>=1.9.0",
+    "flask-cors>=5.0.0",
+    "flask>=3.0.3",
+    "langchain-community>=0.3.5",
+    "langchain-core>=0.3.15",
+    "langchain-openai>=0.2.5",
+    "langchain>=0.3.7",
+    "langgraph>=0.2.44",
+    "openai>=1.53.0",
+    "tiktoken>=0.8.0",
+]
